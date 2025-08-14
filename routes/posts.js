@@ -11,7 +11,7 @@ let posts = [
     {id:4 , title: 'Post Four'}
 ];
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
     const limit = parseInt(req.query.limit);
 
     if(!isNaN(limit) && limit > 0){//here we testing if the value in limit is a number and is greater than 0
@@ -33,7 +33,7 @@ router.get('/:id', (req, res, next) => {
 
     if(!post){
       const error = new Error(`A post with id ${idNum} was not found`);
-      error.status = 404;
+      //error.status = 404;
       return next(error);
     }
     res.status(200).json(post);
@@ -44,26 +44,30 @@ router.get('/:id', (req, res, next) => {
 
 //CRUD operations
 //create new post
-router.post('/', (req, res) =>{
+router.post('/', (req, res, next) =>{
     const newPost = {
         id: posts.length + 1,
         title: req.body.title,
     };
 
     if (!newPost.title){
-        return res.status(400).json({message: 'Please include a title'});
+        const error = new Error(`Please include a title`);
+        error.status = 400;
+        return next(error);
     }
     posts.push(newPost);
     res.status(201).json(posts);
 });
 
 //update post
-router.put('/:id', (req, res) => {
+router.put('/:id', (req, res, next) => {
     const idNum = parseInt(req.params.id);
     const post = posts.find((post) => post.id === idNum);
 
     if (!post){
-        return res.status(404).json({message: `A post with id ${idNum} was not found`});
+        const error = new Error(`A post with id ${idNum} was not found`);
+        error.status = 404;
+        return next(error);
     }
 
     //now we doing the update
@@ -72,12 +76,14 @@ router.put('/:id', (req, res) => {
 });
 
 //delete post
-router.delete('/:id', (req, res) => {
+router.delete('/:id', (req, res, next) => {
     const idNum = parseInt(req.params.id);
     const post = posts.find((post) => post.id === idNum);
 
     if (!post){
-        return req.status(404).json({message: `A post with id ${idNum} was not found`});
+        const error = new Error(`A post with id ${idNum} was not found`);
+        error.status = 404;
+        return next(error);
     }
 
     //now delete the post if it exists
