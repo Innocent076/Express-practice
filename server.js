@@ -9,12 +9,13 @@ import posts from './routes/posts.js';
 
 
 const app = express();//initializing express into this variable,this is what we gonna use for everything.(to create routes,to create middleware,to start the server and also to listen on a port)
+const portNum = process.env.PORT || 5050;//this is the port number that we are gonna use to listen on.and the port number is stored on the env file
 
 //body parser middleware
-app.use(express.json());
+app.use(express.json());//this takes care of being able to send raw json data
 app.use(express.urlencoded({extended: false }));
 
-const portNum = process.env.PORT || 5050;//this is the port number that we are gonna use to listen on.and the port number is stored on the env file
+
 
 /*
 //creating a simple rout
