@@ -5,6 +5,8 @@ import path from 'path';
 //const path = require('path');//a utility to just help with file paths
 //const { title } = require('process');
 import posts from './routes/posts.js';
+import logger from './midleware/logger.js'; //import logger middleware
+import errorHandler from './midleware/error.js'; //import logger middleware
 
 
 
@@ -15,6 +17,8 @@ const portNum = process.env.PORT || 5050;//this is the port number that we are g
 app.use(express.json());//this takes care of being able to send raw json data
 app.use(express.urlencoded({extended: false }));
 
+//logger middleware
+app.use(logger);
 
 
 /*
@@ -59,4 +63,9 @@ app.use(express.static(path.join(__dirname, 'public')));//this is a middleware t
 //routes
 app.use('/api/posts', posts);
 
+//error handler
+app.use(errorHandler);
+
 app.listen(portNum, () => console.log(`server is running on port ${portNum}`));
+
+//middleware - are functions that have access to request and response objects. and they can litteraly do anything,can be used for logging, authentication and many more
