@@ -2,17 +2,23 @@
 //const express = require('express');//imports express library into my project
 import express from 'express';//import express library into my project
 import path from 'path';
+import { fileURLToPath } from 'url';//this helps the __dirname to work since we using ES modules(the import syntax)
 //const path = require('path');//a utility to just help with file paths
 //const { title } = require('process');
 import posts from './routes/posts.js';
 import logger from './midleware/logger.js'; //import logger middleware
 import errorHandler from './midleware/error.js'; //import logger middleware
 import notfound from './midleware/notfound.js';
+const portNum = process.env.PORT || 5050;//this is the port number that we are gonna use to listen on.and the port number is stored on the env file
 
-
+//this will help the __dir to work where i use it,because here am trying to get the dir name=====
+//Get the directory name
+const __filename = fileURLToPath(import.meta.url);//gives us the current file we in' url.
+console.log(__filename);
+//to get the path name or dir name
+const __dirname = path.dirname(__filename);//this gives us the path name of the current file w
 
 const app = express();//initializing express into this variable,this is what we gonna use for everything.(to create routes,to create middleware,to start the server and also to listen on a port)
-const portNum = process.env.PORT || 5050;//this is the port number that we are gonna use to listen on.and the port number is stored on the env file
 
 //body parser middleware
 app.use(express.json());//this takes care of being able to send raw json data
@@ -20,6 +26,11 @@ app.use(express.urlencoded({extended: false }));
 
 //logger middleware
 app.use(logger);
+
+//communicating with frontend
+//setup static folder
+app.use(express.static(path.join(__dirname, 'public')));//this is a middleware that allows us to serve static files from the public folder
+
 
 
 /*
