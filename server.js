@@ -7,6 +7,7 @@ import path from 'path';
 import posts from './routes/posts.js';
 import logger from './midleware/logger.js'; //import logger middleware
 import errorHandler from './midleware/error.js'; //import logger middleware
+import notfound from './midleware/notfound.js';
 
 
 
@@ -62,6 +63,9 @@ app.use(express.static(path.join(__dirname, 'public')));//this is a middleware t
 //after moving routes to their files.
 //routes
 app.use('/api/posts', posts);
+
+//catching url not found or page not found page.
+app.use(notfound);
 
 //error handler
 app.use(errorHandler);
