@@ -9,6 +9,10 @@ import posts from './routes/posts.js';
 import logger from './midleware/logger.js'; //import logger middleware
 import errorHandler from './midleware/error.js'; //import logger middleware
 import notfound from './midleware/notfound.js';
+import { Server } from 'http';
+//database
+import sql from 'mssql';
+import { connectDB } from './database/db.js';
 const portNum = process.env.PORT || 5050;//this is the port number that we are gonna use to listen on.and the port number is stored on the env file
 
 //this will help the __dir to work where i use it,because here am trying to get the dir name=====
@@ -23,6 +27,22 @@ const app = express();//initializing express into this variable,this is what we 
 //body parser middleware
 app.use(express.json());//this takes care of being able to send raw json data
 app.use(express.urlencoded({extended: false }));
+
+//Testing database connection....====/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=
+
+
+(async () => {
+  try {
+    await connectDB();
+    console.log("Database connection successful!");
+  } catch (err) {
+    console.error("Database connection failed!!:", err);
+  }
+})();
+
+
+//=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=/=
+
 
 //logger middleware
 app.use(logger);
